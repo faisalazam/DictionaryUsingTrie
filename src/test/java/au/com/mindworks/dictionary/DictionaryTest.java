@@ -1,20 +1,20 @@
-package test.java.au.com.mindworks.dictionary;
+package au.com.mindworks.dictionary;
 
-import main.java.au.com.mindworks.dictionary.Dictionary;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 public class DictionaryTest {
-    private static final List<String> LIST_OF_WORDS = newArrayList(
+    private static final List<String> LIST_OF_WORDS = asList(
             "a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate",
             "be",
             "dog", "dads", "dad", "digging",
@@ -28,7 +28,7 @@ public class DictionaryTest {
 
     @Test
     public void shouldNotAddAndSearchBlankWord() {
-        final List<String> listOfWords = newArrayList(
+        final List<String> listOfWords = asList(
                 "", " ", null
         );
 
@@ -45,7 +45,7 @@ public class DictionaryTest {
 
     @Test
     public void shouldTrimSpacesOnSidesOfWordWhileAdditionAndSearch() {
-        final List<String> listOfWords = newArrayList(
+        final List<String> listOfWords = asList(
                 " a", "an ", " any ", "ant", "all", "allot", "alloy", "aloe", "are", "ate",
                 "be",
                 "dog", "dads      ", "dad", "digging",
@@ -72,7 +72,7 @@ public class DictionaryTest {
 
     @Test
     public void shouldVerifyAdditionAndSearchIsCaseInsensitive() {
-        final List<String> listOfWords = newArrayList(
+        final List<String> listOfWords = asList(
                 "a", "aN", "Any", "aNt", "alL", "ALLOT", "alloy", "ALOE", "aRe", "Ate",
                 "be",
                 "Dog", "DadS", "dAd", "diGGing",
@@ -97,7 +97,7 @@ public class DictionaryTest {
 
     @Test
     public void shouldNotHaveDuplicatedWordsInDictionary() throws Exception {
-        final List<String> listOfWords = newArrayList(
+        final List<String> listOfWords = asList(
                 "a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate",
                 "a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate",
                 "a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate"
@@ -106,7 +106,7 @@ public class DictionaryTest {
         dictionary.addAllWords(listOfWords);
 
         assertThat(dictionary.size(), is(10));
-        assertThat(dictionary.searchAllWords(), containsInAnyOrder("a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate"));
+        assertThat(dictionary.searchAllWords(), hasItems("a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate"));
     }
 
     @Test
@@ -132,15 +132,15 @@ public class DictionaryTest {
 
         dictionary.addAllWords(LIST_OF_WORDS);
 
-        assertThat(dictionary.searchAllWordsStartingWith("a"), containsInAnyOrder("a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate"));
-        assertThat(dictionary.searchAllWordsStartingWith("an"), containsInAnyOrder("an", "any", "ant"));
-        assertThat(dictionary.searchAllWordsStartingWith("ant"), containsInAnyOrder("ant"));
-        assertThat(dictionary.searchAllWordsStartingWith("any"), containsInAnyOrder("any"));
-        assertThat(dictionary.searchAllWordsStartingWith("aLl"), containsInAnyOrder("all", "allot", "alloy"));
-        assertThat(dictionary.searchAllWordsStartingWith("allO"), containsInAnyOrder("allot", "alloy"));
-        assertThat(dictionary.searchAllWordsStartingWith("I"), containsInAnyOrder("i"));
-        assertThat(dictionary.searchAllWordsStartingWith("dads"), containsInAnyOrder("dads"));
-        assertThat(dictionary.searchAllWordsStartingWith("diGGing"), containsInAnyOrder("digging"));
+        assertThat(dictionary.searchAllWordsStartingWith("a"), hasItems("a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate"));
+        assertThat(dictionary.searchAllWordsStartingWith("an"), hasItems("an", "any", "ant"));
+        assertThat(dictionary.searchAllWordsStartingWith("ant"), hasItems("ant"));
+        assertThat(dictionary.searchAllWordsStartingWith("any"), hasItems("any"));
+        assertThat(dictionary.searchAllWordsStartingWith("aLl"), hasItems("all", "allot", "alloy"));
+        assertThat(dictionary.searchAllWordsStartingWith("allO"), hasItems("allot", "alloy"));
+        assertThat(dictionary.searchAllWordsStartingWith("I"), hasItems("i"));
+        assertThat(dictionary.searchAllWordsStartingWith("dads"), hasItems("dads"));
+        assertThat(dictionary.searchAllWordsStartingWith("diGGing"), hasItems("digging"));
 
         //Verify dictionary does not have any words starting with the following prefixes
         assertTrue(dictionary.searchAllWordsStartingWith("ad").isEmpty());
@@ -154,7 +154,7 @@ public class DictionaryTest {
     public void shouldVerifyThatDictionaryCanProvideAllWordsInDictionaryWhenSearchedWithBlankPrefix() throws Exception {
         dictionary.addAllWords(LIST_OF_WORDS);
 
-        final List<String> blankPrefixes = newArrayList(
+        final List<String> blankPrefixes = asList(
                 "", " ", null
         );
 
@@ -166,14 +166,16 @@ public class DictionaryTest {
 
     @Test
     public void shouldVerifyWordRemoval() {
-        final List<String> listOfWords = newArrayList(
-                "a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate",
-                "be",
-                "dog", "dads", "dad", "digging",
-                "ear", "earn",
-                "i",
-                "mom", "moms", "mommy",
-                "you", "your"
+        final List<String> listOfWords = new ArrayList<String>(
+                asList(
+                        "a", "an", "any", "ant", "all", "allot", "alloy", "aloe", "are", "ate",
+                        "be",
+                        "dog", "dads", "dad", "digging",
+                        "ear", "earn",
+                        "i",
+                        "mom", "moms", "mommy",
+                        "you", "your"
+                )
         );
         final int totalNumberOfWords = listOfWords.size();
 
@@ -205,7 +207,7 @@ public class DictionaryTest {
 
     @Test
     public void shouldRemoveWordOnlyIfExistsInDictionary() throws Exception {
-        final List<String> listOfWords = newArrayList(
+        final List<String> listOfWords = asList(
                 "a", "an", "any", "ant", "all",
                 "dolphin",
                 "elephant", "ear",

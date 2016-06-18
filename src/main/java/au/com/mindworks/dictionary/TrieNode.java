@@ -1,4 +1,4 @@
-package main.java.au.com.mindworks.dictionary;
+package au.com.mindworks.dictionary;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,11 +1,11 @@
-package main.java.au.com.mindworks.dictionary;
+package au.com.mindworks.dictionary;
 
+import au.com.mindworks.dictionary.TrieNode;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class Dictionary {
     private TrieNode root = new TrieNode();
@@ -30,7 +30,7 @@ public class Dictionary {
      * @param wordToAdd
      */
     public void addWord(final String wordToAdd) {
-        if (isBlank(wordToAdd)) {
+        if (wordToAdd == null || wordToAdd.trim().isEmpty()) {
             return;
         }
 
@@ -75,7 +75,7 @@ public class Dictionary {
      * @return true if the word is removed from dictionary, otherwise false (when word is not found in dictionary)
      */
     public boolean removeWord(final String wordToRemove) {
-        if (isBlank(wordToRemove)) {
+        if (wordToRemove == null || wordToRemove.trim().isEmpty()) {
             return false;
         }
 
@@ -126,7 +126,7 @@ public class Dictionary {
      * @return list of all the words in dictionary
      */
     public List<String> searchAllWords() {
-        final List<String> listOfFoundWords = newArrayList();
+        final List<String> listOfFoundWords = new ArrayList<String>();
 
         final Set<Character> characters = root.getChildren().keySet();
         for (Character character : characters) {
@@ -151,20 +151,15 @@ public class Dictionary {
      * @return list of all the words in dictionary if prefix is blank, otherwise all words starting with prefix
      */
     public List<String> searchAllWordsStartingWith(final String prefix) {
-        if (isBlank(prefix)) {
+        if (prefix == null || prefix.trim().isEmpty()) {
             return searchAllWords();
         }
 
+        TrieNode currentRootNode = root;
         final String trimmedLowerCasedPrefix = prefix.trim().toLowerCase();
-        final List<String> listOfFoundWordsWithPrefix = newArrayList();
+        final List<String> listOfFoundWordsWithPrefix = new ArrayList<String>();
 
-        final Character firstCharacter = trimmedLowerCasedPrefix.charAt(0);
-        if (!root.hasChild(firstCharacter)) {
-            return listOfFoundWordsWithPrefix;
-        }
-
-        TrieNode currentRootNode = root.getChild(firstCharacter);
-        for (int i = 1; i < trimmedLowerCasedPrefix.length(); i++) {
+        for (int i = 0; i < trimmedLowerCasedPrefix.length(); i++) {
             if (!currentRootNode.hasChild(trimmedLowerCasedPrefix.charAt(i))) {
                 return listOfFoundWordsWithPrefix;
             }
@@ -179,10 +174,7 @@ public class Dictionary {
         if (currentRootNode.isEndOfWord()) {
             listOfFoundWords.add(word);
         }
-
-        if (!currentRootNode.hasChildren()) {
-            return;
-        } else {
+        if (currentRootNode.hasChildren()) {
             final Set<Character> characters = currentRootNode.getChildren().keySet();
             for (Character character : characters) {
                 searchAllWords(word + character, currentRootNode.getChild(character), listOfFoundWords);
@@ -207,7 +199,7 @@ public class Dictionary {
      * @return true if the wordToSearch is found in dictionary, otherwise return false
      */
     public boolean searchWord(final String wordToSearch) {
-        if (isBlank(wordToSearch)) {
+        if (wordToSearch == null || wordToSearch.trim().isEmpty()) {
             return false;
         }
 
